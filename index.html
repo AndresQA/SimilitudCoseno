@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sprint</title>
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">-->
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+
+  <div id="app">
+
+    <h1 class="titulo">Similitud Coseno:</h1>
+    <div class="contenedor">
+
+      <img v-if="seleccionA" v-bind:src="'/imagenes/' + seleccionA.nombre + '.jpeg'" alt="">
+
+      <section class="usuarios">
+        <div class="usuario">
+          <div class="seleccion">
+            <h1>Usted selecciono a:</h1>
+            <select class="desplegable" v-on:change="onSeleccionA">
+              <option value="">-</option>
+              <option v-for="persona in listaPersonas" v-bind:value="persona.nombre">{{persona.nombre}}</option>
+            </select>
+          </div>
+          <div class="sliders"  v-if="seleccionA">
+            <h3>Y sus propiedades son:</h3>
+      
+            <ul>
+              <li>
+                <h4>Edad:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[0].value" min="10" max="50">
+                <p>{{seleccionA.propiedades[0].value}}</p>
+              </li>
+              <li>
+                <h4>Peso:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[1].value" min="30" max="120">
+                <p>{{seleccionA.propiedades[1].value}}</p>
+              </li>
+              <li>
+                <h4>Altura:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[2].value" min="70" max="200">
+                <p>{{seleccionA.propiedades[2].value}}</p>
+              </li>
+              <li>
+                <h4>Mascotas:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[3].value" min="0" max="30">
+                <p>{{seleccionA.propiedades[3].value}}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+
+      <img v-bind:src="'/imagenes/' + getUserSimilitud.nombre + '.jpeg'" alt="">
+      <h1>{{getUserSimilitud.nombre}}</h1>
+      <h2>Su similitud es de: {{getUserSimilitud.similitud}}</h2>
+    
+
+
+
+      <!--  <input type="text" class="inputK">-->
+
+     <!--  <button class="btnCalcular">Calcular</button>-->
+
+      <div v-if="resultVisible">
+        <h2>La Similitud Coseno entre: {{seleccionA[0]}} y {{seleccionB[0]}} es {{actualizar}} %</h2>
+      </div>
+      <ul class="lista"></ul>
+    </div>
+
+  </div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/librerias/jquery-3.4.1.js"></script>
+  <script src="./index.js"></script>
+</body>
+
+</html>
