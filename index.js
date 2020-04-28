@@ -1,4 +1,8 @@
 
+$(document).ready(function () {
+  $('select').formSelect();
+});
+
 var titulares = [];
 
 
@@ -11,7 +15,8 @@ var app = new Vue({
     seleccionA: undefined,
     seleccionB: [],
     actualResult: undefined,
-    resultVisible: false
+    resultVisible: false,
+    titulares: []
   },
   methods: {
     onSeleccionA(e) {
@@ -22,9 +27,54 @@ var app = new Vue({
   },
   computed: {
     actualizar() {
-      return formulaCoseno();
+      var resultSimilar = formulaCoseno();
+      return resultSimilar;
     },
     getUserSimilitud() {
+
+      var userSimilar = "Ninguno";
+      var listUserSimilaridad = [];
+
+      if (this.seleccionA) {
+
+        var contSuficiente = 0;
+        this.seleccionA.propiedades.forEach(p => {
+          contSuficiente += p.importancia > 0 ? 1 : 0;
+        })
+        if(contSuficiente> 1){
+          this.seleccionA.suficiente = true;
+        }else{
+          this.seleccionA.suficiente = false;
+        }
+
+        this.listaPersonas.forEach((user) => {
+          if (user != this.seleccionA) {
+            calcularCoseno(this.seleccionA, user);
+          }
+        });
+
+        listUserSimilaridad = Object.assign([], this.listaPersonas);
+
+        listUserSimilaridad.sort((a, b) => {
+          if (a.similitud < b.similitud) {
+            return 1;
+          } else {
+            return -1;
+          }
+        })
+
+        userSimilar = listUserSimilaridad[0];
+      }
+
+      var resultSimilar = parseFloat(userSimilar.similitud);
+
+      userSimilar.similitud = (resultSimilar && this.seleccionA.suficiente) ? resultSimilar : "No hay suficientes datos";
+
+
+
+      return userSimilar;
+    },
+    getUserSimilitudList() {
 
       var userSimilar = "Ninguno";
       var listUserSimilaridad = [];
@@ -40,7 +90,7 @@ var app = new Vue({
         listUserSimilaridad = Object.assign([], this.listaPersonas);
 
         listUserSimilaridad.sort((a, b) => {
-          if (a.similitud <= b.similitud) {
+          if (a.similitud < b.similitud) {
             return 1;
           } else {
             return -1;
@@ -50,9 +100,12 @@ var app = new Vue({
         userSimilar = listUserSimilaridad[0];
       }
 
-      userSimilar.similitud = parseFloat(userSimilar.similitud).toFixed(2);
+      var resultSimilar = parseFloat(userSimilar.similitud);
+      userSimilar.similitud = (resultSimilar && this.seleccionA.suficiente) ? resultSimilar : "No hay suficientes datos";
 
-      return userSimilar;
+
+
+      return listUserSimilaridad;
     }
   }
 }
@@ -75,11 +128,11 @@ var calcularCoseno = (usuarioA, usuarioB) => {
     var userB = objectB[index];
 
     //producto punto
-    numerador += parseInt(userA.value) * parseInt(userB.value);
+    numerador += userA.importancia * (parseFloat(userA.value) * parseFloat(userB.value));
     //magnitud
-    denominadorA += parseInt(userA.value) * parseInt(userA.value);
+    denominadorA += userA.importancia * (parseFloat(userA.value) * parseFloat(userA.value));
 
-    denominadorB += parseInt(userB.value) * parseInt(userB.value);
+    denominadorB += userA.importancia * (parseFloat(userB.value) * parseFloat(userB.value));
 
   }
 
@@ -121,11 +174,11 @@ var formulaCoseno = () => {
 
     console.log(index)
     //producto punto
-    numerador += (parseInt(objetoA[index]) * parseInt(objetoB[index]));
+    numerador += objetoA.importancia * (parseInt(objetoA[index]) * parseInt(objetoB[index]));
     //magnitud
-    denominadorA += (parseInt(objetoA[index]) * parseInt(objetoA[index]));
+    denominadorA += objetoA.importancia * (parseInt(objetoA[index]) * parseInt(objetoA[index]));
 
-    denominadorB += (parseInt(objetoB[index]) * parseInt(objetoB[index]));
+    denominadorB += objetoA.importancia * (parseInt(objetoB[index]) * parseInt(objetoB[index]));
 
   }
 
@@ -163,7 +216,8 @@ function successFunction(data) {
   for (let index = 0; index < datosFila.length; index++) {
 
     var usuario = {
-      propiedades: []
+      propiedades: [],
+      suficiente: true
     };
 
     //Lectura de una linea
@@ -174,6 +228,7 @@ function successFunction(data) {
 
     if (index == 0) {
       titulares = arregloDeLista;
+      app._data.titulares = titulares;
     } else {
 
       arregloDeLista.forEach((name, i) => {
@@ -183,22 +238,20 @@ function successFunction(data) {
         } else {
           //los numeros los convierte en numero y los textos los almacena
           var dato = parseInt(name);
-          var title = titulares[i + 1];
+          var title = titulares[i];
 
           if (dato) {
-            usuario.propiedades.push({ titulo: title, value: dato });
+            usuario.propiedades.push({ titulo: title, value: dato, importancia: 1 });
           } else {
-            usuario.propiedades.push({ titulo: title, value: dato });
+            usuario.propiedades.push({ titulo: title, value: dato, importancia: 1 });
           }
         }
       });
 
       informacion.push(usuario);
     }
-
-
-
   }
+
 
   app.listaPersonas = informacion;
 

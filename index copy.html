@@ -36,10 +36,25 @@
             <h3>Y sus propiedades son:</h3>
 
             <ul>
-              <li v-for="prop in seleccionA.propiedades">
-                <h4>{{prop.titulo}}:</h4>
-                <input type="range" v-model:value="prop.importancia" min="0" max="1" step=".1">
-                <p>{{prop.importancia}}</p>
+              <li>
+                <h4>Edad:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[0].value" min="10" max="50">
+                <p>{{seleccionA.propiedades[0].value}}</p>
+              </li>
+              <li>
+                <h4>Peso:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[1].value" min="30" max="120">
+                <p>{{seleccionA.propiedades[1].value}}</p>
+              </li>
+              <li>
+                <h4>Altura:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[2].value" min="70" max="200">
+                <p>{{seleccionA.propiedades[2].value}}</p>
+              </li>
+              <li>
+                <h4>Mascotas:</h4>
+                <input type="range" v-model:value="seleccionA.propiedades[3].value" min="0" max="30">
+                <p>{{seleccionA.propiedades[3].value}}</p>
               </li>
             </ul>
           </div>
@@ -50,18 +65,6 @@
       <img v-bind:src="'/imagenes/' + getUserSimilitud.nombre + '.jpeg'" alt="">
       <h1>{{getUserSimilitud.nombre}}</h1>
       <h2>Su similitud es de: {{getUserSimilitud.similitud}}</h2>
-
-      <table border="1">
-        <tr>
-          <td v-for="titulo in titulares">{{titulo}}</td>
-          <td>Similitud</td>
-        </tr>
-        <tr v-for="user in getUserSimilitudList">
-          <td>{{user.nombre}}</td>
-          <td v-for="prop in user.propiedades">{{prop.value}} | {{prop.importancia}} </td>
-          <td>{{user.similitud}}</td>
-        </tr>
-      </table>
 
 
 
