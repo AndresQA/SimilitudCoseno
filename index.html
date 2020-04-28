@@ -49,7 +49,7 @@
 
       </section>
 
-      <img v-bind:src="'./imagenes/' + getUserSimilitud.nombre + '.jpeg'" alt="">
+      <img v-if="seleccionA" v-bind:src="'./imagenes/' + getUserSimilitud.nombre + '.jpeg'" alt="">
       <h1>{{getUserSimilitud.nombre}}</h1>
       <h2>Su similitud es de: {{getUserSimilitud.similitud}}</h2>
 
