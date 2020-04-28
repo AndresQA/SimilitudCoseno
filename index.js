@@ -200,7 +200,7 @@ var formulaCoseno = () => {
 
 //Cargar el archivo
 $.ajax({
-  url: "../db.csv",
+  url: "./db.csv",
   dataType: "text"
 }).done(successFunction);
 
