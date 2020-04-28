@@ -8,6 +8,8 @@
   <title>Sprint</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="./css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -22,18 +24,18 @@
       <section class="usuarios">
         <div class="usuario">
           <div class="seleccion">
-            <h1>Usted selecciono a:</h1>
+            <h1>Usted seleccionó a:</h1>
             <select class="" v-on:change="onSeleccionA">
               <option value="">-</option>
-              <option v-for="persona in listaPersonas" v-bind:value="persona.nombre">{{persona.nombre}}</option>
+             <!-- <option v-for="persona in listaPersonas" v-bind:value="persona.nombre">{{persona.nombre}}</option>-->
 
-              <!--
-                <option v-for="persona in listaPersonas" v-bind:value="persona.nombre" v-bind:data-icon="'/imagenes/' + re + '.jpeg'">{{persona.nombre}}</option>
-              -->
+              
+                <option v-for="persona in listaPersonas" v-bind:value="persona.nombre" v-bind:data-icon="'/imagenes/' + persona.nombre + '.jpeg'">{{persona.nombre}}</option>
+              
             </select>
           </div>
           <div class="sliders" v-if="seleccionA">
-            <h3>Y sus propiedades son:</h3>
+            <h3>Importancia</h3>
 
             <ul>
               <li v-for="prop in seleccionA.propiedades">
@@ -51,6 +53,7 @@
       <h1>{{getUserSimilitud.nombre}}</h1>
       <h2>Su similitud es de: {{getUserSimilitud.similitud}}</h2>
 
+      <!--
       <table border="1">
         <tr>
           <td v-for="titulo in titulares">{{titulo}}</td>
@@ -62,6 +65,7 @@
           <td>{{user.similitud}}</td>
         </tr>
       </table>
+      -->
 
 
 
