@@ -2,6 +2,12 @@ $(document).ready(function () {
   $('select').formSelect();
 });
 
+//Cargar el archivo
+$.ajax({
+  url: "./db.csv",
+  dataType: "text"
+}).done(successFunction);
+
 
 
 var titulares = [];
@@ -188,11 +194,6 @@ var formulaCoseno = () => {
 }
 
 
-//Cargar el archivo
-$.ajax({
-  url: "./db.csv",
-  dataType: "text"
-}).done(successFunction);
 
 
 
