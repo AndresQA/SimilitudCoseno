@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Sprint</title>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="./css/main.css">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
@@ -19,19 +20,20 @@
     <h1 class="titulo">Similitud Coseno:</h1>
     <div class="contenedor">
 
-      <img v-if="seleccionA" v-bind:src="'./imagenes/' + seleccionA.nombre + '.jpeg'" alt="">
 
       <section class="usuarios">
         <div class="usuario">
+          <img v-if="seleccionA" v-bind:src="'/imagenes/' + seleccionA.nombre + '.jpeg'" alt="">
           <div class="seleccion">
             <h1>Usted seleccionó a:</h1>
             <select class="" v-on:change="onSeleccionA">
               <option value="">-</option>
-             <!-- <option v-for="persona in listaPersonas" v-bind:value="persona.nombre">{{persona.nombre}}</option>-->
+              <!-- <option v-for="persona in listaPersonas" v-bind:value="persona.nombre">{{persona.nombre}}</option>-->
 
-              
-                <option v-for="persona in listaPersonas" v-bind:value="persona.nombre" v-bind:data-icon="'./imagenes/' + persona.nombre + '.jpeg'">{{persona.nombre}}</option>
-              
+
+
+              <option v-for="persona in listaPersonas" v-bind:value="persona.nombre"
+                v-bind:data-icon="'/imagenes/' + persona.nombre + '.jpeg'">{{persona.nombre}}</option>
             </select>
           </div>
           <div class="sliders" v-if="seleccionA">
@@ -40,8 +42,8 @@
             <ul>
               <li v-for="prop in seleccionA.propiedades">
                 <h4>{{prop.titulo}}:</h4>
-                <input type="range" v-model:value="prop.importancia" min="0" max="1" step=".1">
-                <p>{{prop.importancia}}</p>
+                <input type="range" v-model:value="prop.importancia" min="0.01" max="1" step="any">
+                <!-- <p>{{prop.importancia}}</p> -->
               </li>
             </ul>
           </div>
@@ -49,11 +51,12 @@
 
       </section>
 
-      <img v-if="seleccionA" v-bind:src="'./imagenes/' + getUserSimilitud.nombre + '.jpeg'" alt="">
-      <h1>{{getUserSimilitud.nombre}}</h1>
-      <h2>Su similitud es de: {{getUserSimilitud.similitud}}</h2>
+
+
 
       <!--
+
+     
       <table border="1">
         <tr>
           <td v-for="titulo in titulares">{{titulo}}</td>
@@ -65,31 +68,49 @@
           <td>{{user.similitud}}</td>
         </tr>
       </table>
-      -->
-
-
-
-
-      <!--  <input type="text" class="inputK">-->
-
-      <!--  <button class="btnCalcular">Calcular</button>-->
 
       <div v-if="resultVisible">
         <h2>La Similitud Coseno entre: {{seleccionA[0]}} y {{seleccionB[0]}} es {{actualizar}} %</h2>
       </div>
       <ul class="lista"></ul>
+    -->
+
     </div>
 
-  </div>
+      <section class="usuarios">
+
+        <div class="itemsSimilitudes" v-if="seleccionA">
+  
+          <div class="itemSimilitude" v-if="seleccionA" v-for="(user) in getUserSimilitud">
+  
+  
+            <img class="similitudes tooltipped" 
+              v-bind:src="'/imagenes/' + user.nombre + '.jpeg'" 
+              data-position="bottom" 
+              v-bind:data-tooltip="user.nombre" alt=""
+              v-bind:style="[{'bottom': ((user.similitud)*2)-200 + 'px' }]" />
+           <!-- <h2>{{user.nombre}}: </h2>
+            <h2>{{user.similitud | fixed}}</h2>-->
+  
+          </div>
+  
+  
+        </div>
+        
+      </section>
+      
 
 
 
-  <!-- production version, optimized for size and speed -->
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    </div>
 
-  <script src="./librerias/jquery-3.4.1.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="./index.js"></script>
+
+
+    <!-- production version, optimized for size and speed -->
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="./index.js"></script>
 </body>
 
 </html>
