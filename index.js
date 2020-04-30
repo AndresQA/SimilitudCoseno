@@ -1,10 +1,10 @@
-
 $(document).ready(function () {
   $('select').formSelect();
 });
 
-var titulares = [];
 
+
+var titulares = [];
 
 
 
@@ -12,18 +12,25 @@ var app = new Vue({
   el: '#app',
   data: {
     listaPersonas: [],
+    listaPersonasOriginal: [],
     seleccionA: undefined,
     seleccionB: [],
     actualResult: undefined,
     resultVisible: false,
     titulares: []
   },
+
   methods: {
     onSeleccionA(e) {
       this.seleccionA = this.listaPersonas[e.target.selectedIndex - 1];
 
     }
 
+  },
+  filters: {
+    fixed(numero) {
+      return numero.toFixed(2);
+    }
   },
   computed: {
     actualizar() {
@@ -35,25 +42,25 @@ var app = new Vue({
       var userSimilar = "Ninguno";
       var listUserSimilaridad = [];
 
+      listUserSimilaridad = Object.assign([], this.listaPersonas);
+
       if (this.seleccionA) {
 
         var contSuficiente = 0;
         this.seleccionA.propiedades.forEach(p => {
           contSuficiente += p.importancia > 0 ? 1 : 0;
         })
-        if(contSuficiente> 1){
+        if (contSuficiente > 1) {
           this.seleccionA.suficiente = true;
-        }else{
+        } else {
           this.seleccionA.suficiente = false;
         }
 
-        this.listaPersonas.forEach((user) => {
+        listUserSimilaridad.forEach((user) => {
           if (user != this.seleccionA) {
             calcularCoseno(this.seleccionA, user);
           }
         });
-
-        listUserSimilaridad = Object.assign([], this.listaPersonas);
 
         listUserSimilaridad.sort((a, b) => {
           if (a.similitud < b.similitud) {
@@ -63,48 +70,31 @@ var app = new Vue({
           }
         })
 
-        userSimilar = listUserSimilaridad[0];
-      }
-
-      var resultSimilar = parseFloat(userSimilar.similitud);
-
-      userSimilar.similitud = (resultSimilar && this.seleccionA.suficiente) ? resultSimilar : "No hay suficientes datos";
-
-
-
-      return userSimilar;
-    },
-    getUserSimilitudList() {
-
-      var userSimilar = "Ninguno";
-      var listUserSimilaridad = [];
-
-      if (this.seleccionA) {
-
-        this.listaPersonas.forEach((user) => {
-          if (user != this.seleccionA) {
-            calcularCoseno(this.seleccionA, user);
+        var indexCurrent = -1;
+        listUserSimilaridad.forEach((user, index) => {
+          if (this.seleccionA.nombre == user.nombre) {
+            indexCurrent = index;
           }
+
+          this.listaPersonas.forEach((u) => {
+
+            if (user.nombre === u.nombre) {
+              u.orden = index;
+              return;
+            }
+
+          });
         });
 
-        listUserSimilaridad = Object.assign([], this.listaPersonas);
+        listUserSimilaridad.splice(indexCurrent, 2);
 
-        listUserSimilaridad.sort((a, b) => {
-          if (a.similitud < b.similitud) {
-            return 1;
-          } else {
-            return -1;
-          }
-        })
 
-        userSimilar = listUserSimilaridad[0];
       }
+      setTimeout(() => {
+        $('.tooltipped').tooltip();
+      },10)
 
-      var resultSimilar = parseFloat(userSimilar.similitud);
-      userSimilar.similitud = (resultSimilar && this.seleccionA.suficiente) ? resultSimilar : "No hay suficientes datos";
-
-
-
+      //return this.listaPersonas;
       return listUserSimilaridad;
     }
   }
@@ -252,49 +242,58 @@ function successFunction(data) {
     }
   }
 
+  var listNormalizado = Object.assign([], informacion);
 
-  app.listaPersonas = informacion;
+  var valsMin = {};
+  var valsMax = {};
+
+  listNormalizado.forEach(user => {
+    user.propiedades.forEach(prop => {
+      if (valsMin[prop.titulo]) {
+
+        if (prop.value < valsMin[prop.titulo]) {
+          valsMin[prop.titulo] = prop.value;
+        }
+
+      } else {
+        valsMin[prop.titulo] = prop.value;
+      }
+
+
+      if (valsMax[prop.titulo]) {
+
+        if (prop.value > valsMax[prop.titulo]) {
+          valsMax[prop.titulo] = prop.value;
+        }
+
+      } else {
+        valsMax[prop.titulo] = prop.value;
+      }
+    })
+  });
+
+  console.log(valsMin, valsMax)
+
+  listNormalizado.forEach(user => {
+    user.propiedades.forEach(prop => {
+
+      prop.value = map_range(prop.value, valsMin[prop.titulo], valsMax[prop.titulo], 0, 1);
+
+    });
+
+  });
+
+
+  app._data.listaPersonasOriginal = informacion;
+  app._data.listaPersonas = listNormalizado;
+
+  console.log(listNormalizado);
 
 
 }
 
 
 
-var Metodologiausuario = {
-  nombre: "Mi nombre",
-  propiedades: [
-    1, 2, 3
-  ],
-  similitud: 90
+function map_range(value, low1, high1, low2, high2) {
+  return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
-
-var Metodologiausuario2 = {
-  nombre: "Mi nombre",
-  propiedades: {
-    edad: 1,
-    Peso: 2,
-    mascora: 3
-  },
-  similitud: 90
-}
-
-var Metodologiausuario3 = {
-  nombre: "Mi nombre",
-  propiedades: [
-    {
-      title: "Edad",
-      value: 2
-    }, {
-      title: "Mascora",
-      value: 2
-    }, {
-      title: "Edad",
-      value: 2
-    }
-
-  ],
-  similitud: 90
-}
-
-
-
