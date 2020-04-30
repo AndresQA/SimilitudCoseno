@@ -27,7 +27,7 @@
 
         <section class="usuarios">
           <div class="usuario">
-            <img v-if="seleccionA" v-bind:src="'/imagenes/' + seleccionA.nombre + '.jpeg'" alt="">
+            <img v-if="seleccionA" v-bind:src="'./imagenes/' + seleccionA.nombre + '.jpeg'" alt="">
             <div class="seleccion">
               <h1>Usted seleccionó a:</h1>
               <select class="" v-on:change="onSeleccionA">
@@ -37,7 +37,7 @@
 
 
                 <option v-for="persona in listaPersonas" v-bind:value="persona.nombre"
-                  v-bind:data-icon="'/imagenes/' + persona.nombre + '.jpeg'">{{persona.nombre}}</option>
+                  v-bind:data-icon="'./imagenes/' + persona.nombre + '.jpeg'">{{persona.nombre}}</option>
               </select>
             </div>
 
@@ -97,7 +97,7 @@
         <div class="itemSimilitude" v-if="seleccionA" v-for="(user) in getUserSimilitud">
 
 
-          <img class="similitudes tooltipped" v-bind:src="'/imagenes/' + user.nombre + '.jpeg'" data-position="bottom"
+          <img class="similitudes tooltipped" v-bind:src="'./imagenes/' + user.nombre + '.jpeg'" data-position="bottom"
             v-bind:data-tooltip="user.nombre" alt="" v-bind:style="[{'bottom': ((user.similitud)*2)-200 + 'px' }]" />
           <!-- <h2>{{user.nombre}}: </h2>
             <h2>{{user.similitud | fixed}}</h2>-->
