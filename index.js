@@ -92,7 +92,7 @@ var app = new Vue({
       }
       setTimeout(() => {
         $('.tooltipped').tooltip();
-      },10)
+      }, 10)
 
       //return this.listaPersonas;
       return listUserSimilaridad;
@@ -214,8 +214,6 @@ function successFunction(data) {
     let dataLinea = datosFila[index];
     let arregloDeLista = dataLinea.split(",");
 
-
-
     if (index == 0) {
       titulares = arregloDeLista;
       app._data.titulares = titulares;
@@ -224,17 +222,14 @@ function successFunction(data) {
       arregloDeLista.forEach((name, i) => {
 
         if (i == 0) {
+
           usuario.nombre = name;
+
         } else {
           //los numeros los convierte en numero y los textos los almacena
-          var dato = parseInt(name);
           var title = titulares[i];
 
-          if (dato) {
-            usuario.propiedades.push({ titulo: title, value: dato, importancia: 1 });
-          } else {
-            usuario.propiedades.push({ titulo: title, value: dato, importancia: 1 });
-          }
+          usuario.propiedades.push({ titulo: title, value: parseInt(name), importancia: 1 });
         }
       });
 
@@ -248,8 +243,11 @@ function successFunction(data) {
   var valsMax = {};
 
   listNormalizado.forEach(user => {
+
     user.propiedades.forEach(prop => {
-      if (valsMin[prop.titulo]) {
+
+
+      if (valsMin[prop.titulo] != undefined) {
 
         if (prop.value < valsMin[prop.titulo]) {
           valsMin[prop.titulo] = prop.value;
@@ -260,7 +258,7 @@ function successFunction(data) {
       }
 
 
-      if (valsMax[prop.titulo]) {
+      if (valsMax[prop.titulo] != undefined) {
 
         if (prop.value > valsMax[prop.titulo]) {
           valsMax[prop.titulo] = prop.value;
@@ -269,7 +267,7 @@ function successFunction(data) {
       } else {
         valsMax[prop.titulo] = prop.value;
       }
-    })
+    });
   });
 
   console.log(valsMin, valsMax)
@@ -284,10 +282,11 @@ function successFunction(data) {
   });
 
 
+
   app._data.listaPersonasOriginal = informacion;
   app._data.listaPersonas = listNormalizado;
 
-  console.log(listNormalizado);
+
 
 
 }
